@@ -8,10 +8,13 @@ class BasicReactiveTest {
     @Test
     void fluxTest() {
         Flux<String> stringFlux = Flux.just("Spring", "Spring Boot", "Reactive")
-                .concatWith(Flux.error(new RuntimeException("Sample Flux Exc")))
+                .concatWith(Flux.just("Spring Cloud", "Spring Config"))
+//                .concatWith(Flux.error(new RuntimeException("Sample Flux Exc")))
+                .map(s -> s.concat(" Flux"))
                 .log();
 
-        stringFlux.subscribe(resp -> System.out.println(resp),
-                err -> System.out.println(err.getMessage()));
+        stringFlux.buffer(3).subscribe(resp -> System.out.println(resp),
+                err -> System.out.println(err.getMessage()),
+                () -> System.out.println("Completed!!"));
     }
 }

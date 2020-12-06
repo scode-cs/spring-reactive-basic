@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/stream")
@@ -21,10 +20,16 @@ public class StreamController {
 
     private final UserService userService;
 
+    @GetMapping(value = "/numbers", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<Integer> numbers() {
+        return Flux.just(1, 2, 3, 4).delayElements(Duration.ofSeconds(1)).log();
+    }
+
     @GetMapping(value = "/users", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Integer> users() {
-        return Flux.just(1,2,3,4).delayElements(Duration.ofSeconds(1)).log();
+    public Flux<UserResponse> users() {
+        return Flux.fromIterable(userService.users()).delayElements(Duration.ofSeconds(1)).log();
     }
 
 }
