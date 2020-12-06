@@ -1,0 +1,15 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: spring-reactive
+
+springdoc:
+  swagger-ui:
+    config-url: swagger-ui.html
+    enabled: true
+
+
+application-description: Sample App
+application-version: V1
